@@ -1,0 +1,137 @@
+syntax = "proto3";
+package message;
+
+service MsgService {
+  // send message through rpc
+  rpc SendMessage(SendMsgRequest) returns (SendMsgResponse);
+  // send single message to user by websocket
+  rpc SendMsgToUser(SendMsgRequest) returns (SendMsgResponse);
+}
+
+// 原始消息
+message Msg{
+  // 发送者id
+  string send_id = 1;
+  // 接收者id
+  string recv_id = 2;
+  // 本地消息id
+  string local_id = 3;
+  // 服务端消息id
+  string server_id = 4;
+  // 消息创建时间
+  int64 create_time = 5;
+  // 消息发送时间
+  int64 send_time = 6;
+  // 接收方消息序列号
+  int64 seq = 7;
+  // 消息类型(单聊or群聊)
+  MsgType msg_type = 8;
+  // 内容类型(文本or视频or图片)
+  ContentType content_type = 9;
+  // 根据content_type来解码
+  bytes content = 10;
+  // 是否已读
+  bool is_read = 11;
+  // 群id
+  string group_id = 12;
+
+  // 平台类型
+  PlatformType platform = 13;
+
+  // 用户头像
+  string avatar = 14;
+  // 用户昵称
+  string nickname = 15;
+  // 关联消息id(回复/引用功能)
+  optional string related_msg_id = 16;
+
+  // 发送方消息序列号(用于ACK确认)
+  int64 send_seq = 17;
+}
+
+// 消息内容类型(文本,图片,视频,语音,文件,表情,视频通话,音频通话等)
+enum ContentType {
+  Default = 0;
+  Text = 1;
+  Image = 2;
+  Video = 3;
+  Audio = 4;
+  File = 5;
+  Emoji = 6;
+  VideoCall = 7;
+  AudioCall = 8;
+  Error = 9;
+}
+
+// 消息类型(单聊、群聊等)
+enum MsgType {
+  // 单聊消息
+  MsgTypeSingleMsg = 0;
+  // 群聊消息
+  MsgTypeGroupMsg = 1;
+
+  // 群邀请
+  MsgTypeGroupInvitation = 2;
+  // 群邀请新成员
+  MsgTypeGroupInviteNew = 3;
+  // 群成员退出
+  MsgTypeGroupMemberExit = 4;
+  // 群成员移除
+  MsgTypeGroupRemoveMember = 5;
+  // 群解散
+  MsgTypeGroupDismiss = 6;
+  // 群解散或成员退出接收
+  MsgTypeGroupDismissOrExitReceived = 7;
+  // 群邀请接收
+  MsgTypeGroupInvitationReceived = 8;
+  // 群信息更新
+  MsgTypeGroupUpdate = 9;
+
+  // 好友申请
+  MsgTypeFriendApplyReq = 10;
+  // 好友申请响应
+  MsgTypeFriendApplyResp = 11;
+  // 好友拉黑
+  MsgTypeFriendBlack = 12;
+  // 好友删除
+  MsgTypeFriendDelete = 13;
+
+  // 单聊呼叫邀请
+  MsgTypeSingleCallInvite = 14;
+  // 单聊呼叫拒绝
+  MsgTypeRejectSingleCall = 15;
+  // 单聊呼叫同意
+  MsgTypeAgreeSingleCall = 16;
+  // 单聊呼叫邀请未接
+  MsgTypeSingleCallInviteNotAnswer = 17;
+  // 单聊呼叫邀请取消
+  MsgTypeSingleCallInviteCancel = 18;
+  // 单聊呼叫offer 在点对点通话建立过程中，发起方发送 Offer 包含媒体配置信息
+  MsgTypeSingleCallOffer = 19;
+  // 单聊挂断
+  MsgTypeHangup = 20;
+  // 单聊呼叫连接
+  MsgTypeConnectSingleCall = 21;
+  // 单聊呼叫候选人
+  MsgTypeCandidate = 22;
+
+  // 已读回执
+  MsgTypeRead = 23;
+  // 消息接收响应
+  MsgTypeMsgRecResp = 24;
+  // 通知消息
+  MsgTypeNotification = 25;
+  // 服务消息
+  MsgTypeService = 26;
+  // 好友关系接收
+  MsgTypeFriendshipReceived = 27;
+}
+
+// 平台类型
+enum PlatformType {
+  Desktop = 0;
+  Mobile = 1;
+}
+
+message SendMsgRequest { Msg message = 1; }
+message SendMsgResponse {}

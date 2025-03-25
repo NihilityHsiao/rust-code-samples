@@ -1,0 +1,18 @@
+[workspace]
+members = ["tonic_grpc_load_balance"]
+resolver = "2"
+
+
+[workspace.dependencies]
+tokio = {version =  "1.44.1",features = ["full"] }
+tonic = {version = "0.12.3"}
+# tonic 内的tower版本是0.4.13
+tower = { version = "0.4.13", features = ["discover"] }
+anyhow = "1.0.97"
+prost = "0.13.5"
+prost-types = "0.13.5"
+tracing = "0.1.41"
+tracing-subscriber = "0.3.19"
+tonic-build = "0.12.3"
+serde = { version = "1.0.219", features = ["derive"] }
+serde_json = "1.0.140"
